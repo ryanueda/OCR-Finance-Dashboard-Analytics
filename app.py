@@ -236,6 +236,9 @@ try:
 
     concat.to_csv('check.csv')
     fig = px.pie(concat, 'Type')
+    fig.update_layout(
+            title="Distribution Of Transaction Type"
+        )
     totalDrCr = totalDrCr()
 
     col1, col2 = st.columns(2)
