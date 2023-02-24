@@ -97,4 +97,3 @@ wcwidth==0.2.6
 xlrd==0.7.1
 xlwt==0.7.2
 zipp==3.14.0
-libgl1-mesa-glx
