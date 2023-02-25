@@ -24,7 +24,7 @@ st.markdown("""
 }
 
 .med-font {
-    font-size: 20px !important;
+    font-size: 15px !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -34,7 +34,7 @@ st.sidebar.markdown('<h1 class="big-font">Upload & Filter</h1>', unsafe_allow_ht
 uploaded_files = st.sidebar.file_uploader("Upload Your Bank Statement", type=['pdf'], accept_multiple_files=True)
 for uploaded_file in uploaded_files:
     bytes_data = uploaded_file.read()
-    st.write("filename:", uploaded_file.name)
+
 
 try:
     for pdf in range(len(uploaded_files)):
@@ -233,19 +233,57 @@ try:
 
 
         return fig
+    
 
-    concat.to_csv('check.csv')
+    def sumDrCr():
+        sumDF = concat.copy()
+        sumDF['Debit'] = sumDF['Debit'].str[2:]
+        sumDF['Credit'] = sumDF['Credit'].str[2:]
+        sumDF['Debit'] = sumDF['Debit'].astype(float)
+        sumDF['Credit'] = sumDF['Credit'].astype(float)
+        dr = round(sumDF['Debit'].sum(), 2)
+        cr = round(sumDF['Credit'].sum(), 2)
+        return dr, cr
+    
+
+    def balSeries():
+        sumDF = concat.copy()
+        sumDF['Balance'] = sumDF['Balance'].str[2:]
+        sumDF['Balance'] = sumDF['Balance'].astype(float)
+        # Convert the 'Date' column to a datetime object
+        sumDF['Date'] = pd.to_datetime(sumDF['Date'])
+
+        # Group the DataFrame by 'Date'
+        grouped_df = sumDF.groupby('Date')['Balance'].max().reset_index()
+        print('GROUPEDDDDDD DFFFFF')
+        print(grouped_df.shape)
+        print(grouped_df.columns)
+
+        fig = px.line(grouped_df, x='Date', y='Balance', title='Time Series Of Bank Balance')
+        return fig
+
+
+    concat.to_excel('check.xlsx')
+
+
     fig = px.pie(concat, 'Type')
     fig.update_layout(
             title="Distribution Of Transaction Type"
         )
+    
     totalDrCr = totalDrCr()
+    dr, cr = sumDrCr()
+    st.write('Total Debit: S$' + str(dr))
+    st.write('Total Credit: S$' + str(cr))
+    linePlot = balSeries()
 
     col1, col2 = st.columns(2)
     with col1:
         st.plotly_chart(fig, use_container_width=True)
     with col2:
         st.plotly_chart(totalDrCr, use_container_width=True)
+
+    st.plotly_chart(linePlot, use_container_width=True)
 
 except:
     pass
