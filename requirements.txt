@@ -60,7 +60,6 @@ scipy==1.10.1
 semver==2.13.0
 six==1.16.0
 smmap==5.0.0
-SQLAlchemy==0.7.10
 sqlalchemy-migrate==0.11.0
 sqlparse==0.4.3
 statsmodels==0.13.5
