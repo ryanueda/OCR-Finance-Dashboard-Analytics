@@ -16,7 +16,7 @@ import streamlit.components.v1 as components
 
 ## HEADER
 st.set_page_config(page_title='Dashboard Analytics')
-st.header('Personal Finances Dashboard')
+st.title('Personal Finances Dashboard')
 st.subheader('Graphs & Analytics')
 st.write('')
 
@@ -34,6 +34,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 st.sidebar.markdown('<h1 class="big-font">Upload & Filter</h1>', unsafe_allow_html=True)
+st.sidebar.subheader('')
 
 ## FILE UPLOAD
 uploaded_files = st.sidebar.file_uploader("Upload Your Bank Statement", type=['pdf'], accept_multiple_files=True)
@@ -47,7 +48,7 @@ try:
         pdf_file = io.BytesIO(pdf_contents)
         pdf_base64 = base64.b64encode(pdf_file.read()).decode('utf-8')
         
-        with open(f'statements/statement_{pdf+1}.pdf', 'wb') as f:
+        with open(f'./statements/statement_{pdf+1}.pdf', 'wb') as f:
             f.write(pdf_file.getbuffer())
             print('PDF Saved')
 
