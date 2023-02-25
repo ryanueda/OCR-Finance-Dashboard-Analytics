@@ -173,7 +173,7 @@ try:
         
     ## SET FILE PATH
     directory = os.getcwd()
-    path = directory + 'statements'
+    path = 'statements'
     filenames = os.listdir(path)
     concatList = []
 
