@@ -36,7 +36,7 @@ st.sidebar.markdown('<h1 class="big-font">Upload & Filter</h1>', unsafe_allow_ht
 ## FILE UPLOAD
 uploaded_files = st.sidebar.file_uploader("Upload Your Bank Statement", type=['pdf'], accept_multiple_files=True)
 for uploaded_file in uploaded_files:
-    bytes_data = uploaded_file.read()
+    bytes_data = uploaded_file.read() 
 
 
 try:
@@ -173,7 +173,7 @@ try:
         
     ## SET FILE PATH
     directory = os.getcwd()
-    path = directory + '\statements'
+    path = directory + 'statements'
     filenames = os.listdir(path)
     concatList = []
 
