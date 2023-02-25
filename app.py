@@ -173,7 +173,7 @@ try:
         
     ## SET FILE PATH
     directory = os.getcwd()
-    path = directory + '/statements'
+    path = directory + 'statements'
     filenames = os.listdir(path)
     concatList = []
 
@@ -263,7 +263,12 @@ try:
         return fig
 
 
-    concat.to_excel('check.xlsx')
+    concat.to_excel('parsed.xlsx')
+    with open('parsed.xlsx', 'rb') as f:
+        bytes_data = f.read()
+
+    st.sidebar.write('Download Excel File')
+    st.sidebar.download_button('Download Excel', data=bytes_data, file_name='parsedStatements.xlsx', mime='xlsx')
 
 
     fig = px.pie(concat, 'Type')
