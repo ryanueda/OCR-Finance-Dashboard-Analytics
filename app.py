@@ -9,6 +9,9 @@ import numpy as np
 import base64
 import io
 import glob
+import plotly.offline as pyo
+import plotly.graph_objs as go
+import streamlit.components.v1 as components
 
 
 ## HEADER
@@ -255,11 +258,8 @@ try:
 
         # Group the DataFrame by 'Date'
         grouped_df = sumDF.groupby('Date')['Balance'].max().reset_index()
-        print('GROUPEDDDDDD DFFFFF')
-        print(grouped_df.shape)
-        print(grouped_df.columns)
-
         fig = px.line(grouped_df, x='Date', y='Balance', title='Time Series Of Bank Balance')
+
         return fig
 
 
@@ -279,11 +279,12 @@ try:
 
     col1, col2 = st.columns(2)
     with col1:
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, sharing="streamlit")
     with col2:
-        st.plotly_chart(totalDrCr, use_container_width=True)
+        st.plotly_chart(totalDrCr, use_container_width=True, sharing="streamlit")
 
-    st.plotly_chart(linePlot, use_container_width=True)
+    
+    st.plotly_chart(fig, use_container_width=True, sharing="streamlit")
 
 except:
     pass
