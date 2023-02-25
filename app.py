@@ -286,6 +286,6 @@ try:
     
     st.plotly_chart(fig, use_container_width=True, sharing="streamlit")
 
-except:
-    st.write('ERROR')
+except Exception as e:
+    st.write(e)
     pass
