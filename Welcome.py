@@ -20,14 +20,14 @@ st.markdown('<h1>Landing Site</h1>', unsafe_allow_html=True)
 st.subheader("The Official Landing Site Of Ryan's Financial Analytics")
 st.write('')
 
-st.write('\nWelcome! This is the official landing site of my Personal Finances Analytics & Dashboard Web App.\n')
-st.markdown('<div class="button"><a href="https://www.instagram.com"><p class="text">Go To Dashboard</p></a></div>', unsafe_allow_html=True)
-st.write('')
+st.write('\nWelcome! This is the official landing site of my Personal Finances Analytics & Dashboard Web App.')
 
 st.markdown('<h3>What Does This Website Do?</h3>', unsafe_allow_html=True)
 st.markdown('''This website takes in DBS/POSB Bank Statements in the form of PDF, and uses <b>Optical Character Recognition (OCR)</b> tecghnology 
          to scan the PDF for table data consisting of your transactions, and wrangles this data to produce a vast selection of interactive visualizations 
          and statistical analytics for you to better understand your own financial standing.''', unsafe_allow_html=True)
+st.markdown('<div class="button"><a href="https://www.instagram.com"><p class="text">Go To Dashboard</p></a></div>', unsafe_allow_html=True)
+st.write('')
 st.write('')
 
 st.markdown('<h3>How Do I Use It?</h3>', unsafe_allow_html=True)
@@ -39,7 +39,6 @@ st.markdown('''
             4) Input your PDF Bank Statements in the sidebar File Upload widget
             5) That's It! Allow our program some time to analyse your files, and view the dashboard :)
             ''', unsafe_allow_html=True)
-st.write('')
 st.write('')
 
 st.markdown('<h6>DISCLAIMERS</h6>', unsafe_allow_html=True)
