@@ -284,7 +284,7 @@ try:
         st.plotly_chart(totalDrCr, use_container_width=True, sharing="streamlit")
 
     
-    st.plotly_chart(fig, use_container_width=True, sharing="streamlit")
+    st.plotly_chart(linePlot, use_container_width=True, sharing="streamlit")
 
 except Exception as e:
     st.write(e)
