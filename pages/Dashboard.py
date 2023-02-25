@@ -313,4 +313,5 @@ try:
     status.text('Done !')
 
 except Exception as e:
+    st.write('Upload Your File(s) To Proceed')
     pass
