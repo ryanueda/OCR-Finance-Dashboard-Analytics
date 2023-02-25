@@ -57,7 +57,7 @@ platformdirs==3.0.0
 plotly==5.13.0
 prompt-toolkit==3.0.37
 protobuf==3.20.3
-psutil==5.9.4
+psutil
 pure-eval==0.2.2
 pyarrow==11.0.0
 pycparser==2.21
