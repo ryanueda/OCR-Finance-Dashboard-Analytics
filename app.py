@@ -18,6 +18,8 @@ import streamlit.components.v1 as components
 st.set_page_config(page_title='Dashboard Analytics')
 st.header('Personal Finances Dashboard')
 st.subheader('Graphs & Analytics')
+st.write('')
+
 
 ## SIDEBAR
 st.markdown("""
@@ -137,6 +139,7 @@ try:
             concat = concat.loc[~(concat == '').all(axis=1)]
             concat = concat.reset_index(drop=True)
 
+
             if concat.at[concat.shape[0]-1, 'Debit'] != '' and concat.at[concat.shape[0]-1, 'Credit'] != '':
                 DrBal = concat.at[concat.shape[0]-1, 'Debit']
                 CrBal = concat.at[concat.shape[0]-1, 'Credit']
@@ -175,11 +178,20 @@ try:
     directory = os.getcwd()
     path = 'statements'
     filenames = os.listdir(path)
+    progress = st.progress(0)
+    status = st.empty()
     concatList = []
 
     for pdf in range(len(filenames)):
+        status.text(f'Analysing File {pdf+1}...')
         concat = parseData(filenames[pdf])
         concatList.append(concat)
+        noFiles = len(filenames)
+        progVal = int(80/noFiles)
+        progress_value = ((pdf+1)*progVal)
+        progress.progress(progress_value)
+        
+
 
     concat = pd.concat(concatList, axis=0)
     concat = concat.reset_index(drop=True)
@@ -207,6 +219,7 @@ try:
 
         if index != 0:
             index -= 1
+
 
 
     def totalDrCr():
@@ -271,6 +284,7 @@ try:
     st.sidebar.download_button('Download Excel', data=bytes_data, file_name='parsedStatements.xlsx', mime='xlsx')
 
 
+
     fig = px.pie(concat, 'Type')
     fig.update_layout(
             title="Distribution Of Transaction Type"
@@ -278,6 +292,7 @@ try:
     
     totalDrCr = totalDrCr()
     dr, cr = sumDrCr()
+    st.write('')
     st.write('Total Debit: S$' + str(dr))
     st.write('Total Credit: S$' + str(cr))
     linePlot = balSeries()
@@ -290,6 +305,11 @@ try:
 
     
     st.plotly_chart(linePlot, use_container_width=True, sharing="streamlit")
+
+
+
+    progress.progress(100)
+    status.text('Done !')
 
 except Exception as e:
     st.write(e)
