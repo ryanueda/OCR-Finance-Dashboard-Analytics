@@ -313,5 +313,5 @@ try:
     status.text('Done !')
 
 except Exception as e:
-    print(e)
+    st.write(e)
     pass
