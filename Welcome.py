@@ -40,14 +40,25 @@ st.markdown('''
             5) That's It! Allow our program some time to analyse your files, and view the dashboard :)
             ''', unsafe_allow_html=True)
 st.write('')
+st.write('')
+st.write('')
 
 st.markdown('<h6>DISCLAIMERS</h6>', unsafe_allow_html=True)
 st.markdown('''
             1) This app is in its beta testing stages, and may be unstable. If you encounter any bugs, feel free to drop me an email at <a href="ryanueda34@gmail.com">ryanueda34@gmail.com</a>
             2) Amount of time taken to analyse and generate dashboard scales proportionally with number of PDF files. This may take a while as the app is slightly computationally expensive and is hosted on Streamlit Sharing, with limited bandwidth
             ''', unsafe_allow_html=True)
+st.write('')
+st.write('')
+
+st.markdown('<h6>DATA PRIVACY NOTICE</h6>', unsafe_allow_html=True)
+st.markdown('''
+            All data used in this site is strictly confidential and protected, and is not stored by any means. Additionally, no developers nor users are able to view your data other than yourself.
+            All processes and workings of the site's functionaility is fully transparent and ethical.
+            ''', unsafe_allow_html=True)
 
 
+## SIDEBAR
 st.sidebar.markdown('<h1 class="socials">My Socials</h1>', unsafe_allow_html=True)
 st.sidebar.markdown('''<p class="socials">
                Interested in my works? Check out my <a href='https://github.com/ryanueda'>GitHub</a>, 
