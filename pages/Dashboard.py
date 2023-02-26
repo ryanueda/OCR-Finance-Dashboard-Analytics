@@ -41,11 +41,10 @@ st.sidebar.subheader('')
 try:
     ## FILE UPLOAD
     uploaded_files = st.sidebar.file_uploader("Upload Your Bank Statement", type=['pdf'], accept_multiple_files=True)
-    st.sidebar.write('')
     final = st.sidebar.text_input('Enter Final Bank Balance :moneybag:', placeholder="Your Bank Balance")
-    bank = st.sidebar.radio('Bank', options=['DBS', 'POSB'])
+    bank = st.sidebar.radio('Bank', options=['POSB', 'DBS'])
 
-    if uploaded_files != '':
+    if uploaded_files != []:
         directory = os.getcwd()
         path = directory + '/statements'
         files = os.listdir(path)
@@ -57,6 +56,7 @@ try:
 
 
     if final == '':
+        st.write("Sample File: 'posb_statement_1.pdf'")
         final = 204.67
     else:
         if not re.match("^[0-9]+(\.[0-9]*)?$", final):
@@ -512,9 +512,10 @@ b {
         progress.progress(100)
         status.text('Done !')
     except Exception as e:
-        print(e)
+        # st.write(e)
         pass
    
 
-except FileNotFoundError as e:
+except Exception as e:
+    # st.write(e)
     pass
