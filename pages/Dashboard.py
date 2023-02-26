@@ -511,7 +511,7 @@ b {
         progress.progress(100)
         status.text('Done !')
     except Exception as e:
-        # st.write(e)
+        st.write(e)
         pass
    
 
