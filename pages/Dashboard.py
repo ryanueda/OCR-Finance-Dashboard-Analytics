@@ -177,7 +177,7 @@ try:
         
     ## SET FILE PATH
     directory = os.getcwd()
-    path = directory + '\statements'
+    path = directory + '/statements'
     # path = '../statements/'
     st.write(path)
     filenames = os.listdir(path)
