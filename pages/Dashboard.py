@@ -47,7 +47,7 @@ try:
 
     if uploaded_files != '':
         directory = os.getcwd()
-        path = directory + 'statements'
+        path = directory + '/statements'
         files = os.listdir(path)
 
         for file in files:
