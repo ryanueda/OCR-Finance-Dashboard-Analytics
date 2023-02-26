@@ -512,10 +512,9 @@ b {
         progress.progress(100)
         status.text('Done !')
     except Exception as e:
-        st.write(e)
+        print(e)
         pass
    
 
-except Exception as e:
-    st.write(e)
+except FileNotFoundError as e:
     pass
