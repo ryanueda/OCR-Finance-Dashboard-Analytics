@@ -85,6 +85,7 @@ try:
 
     # @st.cache_data
     def parsePOSBData(file):
+            st.write('hello')
             tables = camelot.read_pdf(f'statements/{file}', flavor='stream', pages='all')
             concat = tables[0].df
 
@@ -515,5 +516,6 @@ b {
         pass
    
 
-except FileNotFoundError:
+except Exception as e:
+    st.write(e)
     pass
