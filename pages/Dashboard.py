@@ -180,140 +180,140 @@ try:
     path = directory + '/statements'
     try:
         filenames = os.listdir(path)
-    except FileNotFoundError:
-        pass
-    progress = st.progress(0)
-    status = st.empty()
-    concatList = []
+        progress = st.progress(0)
+        status = st.empty()
+        concatList = []
 
-    for pdf in range(len(filenames)):
-        status.text(f'Analysing File {pdf+1}...')
-        concat = parseData(filenames[pdf])
-        concatList.append(concat)
-        noFiles = len(filenames)
-        progVal = int(80/noFiles)
-        progress_value = ((pdf+1)*progVal)
-        progress.progress(progress_value)
+        for pdf in range(len(filenames)):
+            status.text(f'Analysing File {pdf+1}...')
+            concat = parseData(filenames[pdf])
+            concatList.append(concat)
+            noFiles = len(filenames)
+            progVal = int(80/noFiles)
+            progress_value = ((pdf+1)*progVal)
+            progress.progress(progress_value)
+            
+
+
+        concat = pd.concat(concatList, axis=0)
+        concat = concat.reset_index(drop=True)
+
+        ## WRANGLING
+        concat['Balance'] = ''
+        final = 204.47
+        concat.at[concat.shape[0]-1, 'Balance'] = 'S$' + str(204.47)
+        index = concat.shape[0]-2
+
+        totalDr = totalCr = 0
+        for agg in range(len(concat)):
+
+            if concat.at[index, 'Debit'] != '':
+                if isinstance(concat.at[index, 'Debit'], float) == False:
+                    update = final - float(concat.at[index, 'Debit'][2:])
+                    totalDr += float(concat.at[index, 'Debit'][2:])
+                    concat.at[index, 'Balance'] = 'S$' + str(round(update, 2))
+
+            if concat.at[index, 'Credit'] != '':
+                if isinstance(concat.at[index, 'Credit'], float) == False:
+                    update = final + float(concat.at[index, 'Credit'][2:])
+                    totalCr += float(concat.at[index, 'Credit'][2:])
+                    concat.at[index, 'Balance'] = 'S$' + str(round(update, 2))
+
+            if index != 0:
+                index -= 1
+
+
+
+        def totalDrCr():
+            sumDF = concat.copy()
+            sumDF['Debit'] = sumDF['Debit'].str[2:]
+            sumDF['Credit'] = sumDF['Credit'].str[2:]
+
+            sumDF['Debit'] = sumDF['Debit'].astype(float)
+            sumDF['Credit'] = sumDF['Credit'].astype(float)
+            sumDF['Date'] = sumDF['Date'].str[-4:]
+
+            years = sumDF['Date'].unique()
+
+            color_map = {'Debit': 'rgb(228,26,28)', 'Credit': 'rgb(55,126,184)'}
+
+            grouped_df = sumDF.groupby('Date').agg({'Debit': 'sum', 'Credit': 'sum'}).reset_index()
+
+            # Create a bar chart of total debit and credit amounts by year
+            fig = px.bar(grouped_df, x='Date', y=['Debit', 'Credit'], barmode='group', color_discrete_map=color_map)
+
+            # Add axis labels and title
+            fig.update_layout(
+                xaxis_title="Year",
+                yaxis_title="Amount",
+                title="Total Debit and Credit Amounts by Year"
+            )
+
+            return fig
         
 
+        def sumDrCr():
+            sumDF = concat.copy()
+            sumDF['Debit'] = sumDF['Debit'].str[2:]
+            sumDF['Credit'] = sumDF['Credit'].str[2:]
+            sumDF['Debit'] = sumDF['Debit'].astype(float)
+            sumDF['Credit'] = sumDF['Credit'].astype(float)
+            dr = round(sumDF['Debit'].sum(), 2)
+            cr = round(sumDF['Credit'].sum(), 2)
+            return dr, cr
+        
 
-    concat = pd.concat(concatList, axis=0)
-    concat = concat.reset_index(drop=True)
+        def balSeries():
+            sumDF = concat.copy()
+            sumDF['Balance'] = sumDF['Balance'].str[2:]
+            sumDF['Balance'] = sumDF['Balance'].astype(float)
+            # Convert the 'Date' column to a datetime object
+            sumDF['Date'] = pd.to_datetime(sumDF['Date'])
 
-    ## WRANGLING
-    concat['Balance'] = ''
-    final = 204.47
-    concat.at[concat.shape[0]-1, 'Balance'] = 'S$' + str(204.47)
-    index = concat.shape[0]-2
+            # Group the DataFrame by 'Date'
+            grouped_df = sumDF.groupby('Date')['Balance'].max().reset_index()
+            fig = px.line(grouped_df, x='Date', y='Balance', title='Time Series Of Bank Balance')
 
-    totalDr = totalCr = 0
-    for agg in range(len(concat)):
-
-        if concat.at[index, 'Debit'] != '':
-            if isinstance(concat.at[index, 'Debit'], float) == False:
-                update = final - float(concat.at[index, 'Debit'][2:])
-                totalDr += float(concat.at[index, 'Debit'][2:])
-                concat.at[index, 'Balance'] = 'S$' + str(round(update, 2))
-
-        if concat.at[index, 'Credit'] != '':
-            if isinstance(concat.at[index, 'Credit'], float) == False:
-                update = final + float(concat.at[index, 'Credit'][2:])
-                totalCr += float(concat.at[index, 'Credit'][2:])
-                concat.at[index, 'Balance'] = 'S$' + str(round(update, 2))
-
-        if index != 0:
-            index -= 1
+            return fig
 
 
+        concat.to_excel('parsed.xlsx')
+        with open('parsed.xlsx', 'rb') as f:
+            bytes_data = f.read()
 
-    def totalDrCr():
-        sumDF = concat.copy()
-        sumDF['Debit'] = sumDF['Debit'].str[2:]
-        sumDF['Credit'] = sumDF['Credit'].str[2:]
+        st.sidebar.write('Download Excel File')
+        st.sidebar.download_button('Download Excel', data=bytes_data, file_name='parsedStatements.xlsx', mime='xlsx')
 
-        sumDF['Debit'] = sumDF['Debit'].astype(float)
-        sumDF['Credit'] = sumDF['Credit'].astype(float)
-        sumDF['Date'] = sumDF['Date'].str[-4:]
 
-        years = sumDF['Date'].unique()
 
-        color_map = {'Debit': 'rgb(228,26,28)', 'Credit': 'rgb(55,126,184)'}
-
-        grouped_df = sumDF.groupby('Date').agg({'Debit': 'sum', 'Credit': 'sum'}).reset_index()
-
-        # Create a bar chart of total debit and credit amounts by year
-        fig = px.bar(grouped_df, x='Date', y=['Debit', 'Credit'], barmode='group', color_discrete_map=color_map)
-
-        # Add axis labels and title
+        fig = px.pie(concat, 'Type')
         fig.update_layout(
-            xaxis_title="Year",
-            yaxis_title="Amount",
-            title="Total Debit and Credit Amounts by Year"
-        )
+                title="Distribution Of Transaction Type"
+            )
+        
+        totalDrCr = totalDrCr()
+        dr, cr = sumDrCr()
+        st.write('')
+        st.write('Total Debit: S$' + str(dr))
+        st.write('Total Credit: S$' + str(cr))
+        linePlot = balSeries()
 
+        col1, col2 = st.columns(2)
+        with col1:
+            st.plotly_chart(fig, use_container_width=True, sharing="streamlit")
+        with col2:
+            st.plotly_chart(totalDrCr, use_container_width=True, sharing="streamlit")
 
-        return fig
-    
-
-    def sumDrCr():
-        sumDF = concat.copy()
-        sumDF['Debit'] = sumDF['Debit'].str[2:]
-        sumDF['Credit'] = sumDF['Credit'].str[2:]
-        sumDF['Debit'] = sumDF['Debit'].astype(float)
-        sumDF['Credit'] = sumDF['Credit'].astype(float)
-        dr = round(sumDF['Debit'].sum(), 2)
-        cr = round(sumDF['Credit'].sum(), 2)
-        return dr, cr
-    
-
-    def balSeries():
-        sumDF = concat.copy()
-        sumDF['Balance'] = sumDF['Balance'].str[2:]
-        sumDF['Balance'] = sumDF['Balance'].astype(float)
-        # Convert the 'Date' column to a datetime object
-        sumDF['Date'] = pd.to_datetime(sumDF['Date'])
-
-        # Group the DataFrame by 'Date'
-        grouped_df = sumDF.groupby('Date')['Balance'].max().reset_index()
-        fig = px.line(grouped_df, x='Date', y='Balance', title='Time Series Of Bank Balance')
-
-        return fig
-
-
-    concat.to_excel('parsed.xlsx')
-    with open('parsed.xlsx', 'rb') as f:
-        bytes_data = f.read()
-
-    st.sidebar.write('Download Excel File')
-    st.sidebar.download_button('Download Excel', data=bytes_data, file_name='parsedStatements.xlsx', mime='xlsx')
+        
+        st.plotly_chart(linePlot, use_container_width=True, sharing="streamlit")
 
 
 
-    fig = px.pie(concat, 'Type')
-    fig.update_layout(
-            title="Distribution Of Transaction Type"
-        )
-    
-    totalDrCr = totalDrCr()
-    dr, cr = sumDrCr()
-    st.write('')
-    st.write('Total Debit: S$' + str(dr))
-    st.write('Total Credit: S$' + str(cr))
-    linePlot = balSeries()
-
-    col1, col2 = st.columns(2)
-    with col1:
-        st.plotly_chart(fig, use_container_width=True, sharing="streamlit")
-    with col2:
-        st.plotly_chart(totalDrCr, use_container_width=True, sharing="streamlit")
-
-    
-    st.plotly_chart(linePlot, use_container_width=True, sharing="streamlit")
-
-
-
-    progress.progress(100)
-    status.text('Done !')
+        progress.progress(100)
+        status.text('Done !')
+    except FileNotFoundError:
+        pass
+   
 
 except Exception as e:
     st.write(e)
