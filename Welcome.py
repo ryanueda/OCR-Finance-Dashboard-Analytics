@@ -79,6 +79,15 @@ st.sidebar.markdown('''<p class="socials">
                 ''', unsafe_allow_html=True)
 
 
+st.sidebar.markdown('''
+                    <p class="copyright">
+                        <b>&#169; Copyright 2023 Ryan Ueda Teo</b> <br><br>
+                        All Rights Reserved. <br>
+                        Redistribution and use of source, with or without modification, are permitted provided it is approved by the <a href="ryanueda34@gmail.com">owner</a> and credit is given.
+                    </p>
+                    ''', unsafe_allow_html=True)
+
+
 st.markdown("""
 <style>
 
@@ -138,6 +147,13 @@ h3 {
 .socials {
     margin-left: 20px;  
 }
+
+.copyright {
+    margin-top: 50%;
+    font-size: 12px;
+    margin-left: 7%;
+}
+
 </style>
 """, unsafe_allow_html=True)
 

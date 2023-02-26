@@ -297,6 +297,8 @@ try:
 
 
         concat['Date'] = pd.to_datetime(concat['Date'])
+        concat = concat.sort_values(by=['Date'])
+
         concat.to_excel('parsed.xlsx')
         with open('parsed.xlsx', 'rb') as f:
             bytes_data = f.read()
