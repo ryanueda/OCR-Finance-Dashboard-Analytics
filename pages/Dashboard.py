@@ -285,7 +285,12 @@ try:
 
             # Group the DataFrame by 'Date'
             grouped_df = sumDF.groupby('Date')['Balance'].max().reset_index()
-            fig = px.line(grouped_df, x='Date', y='Balance', title='Time Series Of Bank Balance')
+            show_trendline = st.sidebar.checkbox('Show Trendline', value=True)
+            if not show_trendline:
+                fig = px.scatter(grouped_df, x='Date', y='Balance', title='Time Series Of Bank Balance')
+            else:
+                fig = px.scatter(grouped_df, x='Date', y='Balance', trendline='lowess', trendline_scope='overall', trendline_color_override='red', title='Time Series Of Bank Balance')
+            fig.update_traces(mode='lines')
 
             return fig
 
@@ -296,6 +301,9 @@ try:
 
         st.sidebar.write('Download Excel File')
         st.sidebar.download_button('Download Excel', data=bytes_data, file_name='parsedStatements.xlsx', mime='xlsx')
+        st.sidebar.write('')
+
+        st.sidebar.markdown('<h3>Display Options</h3>', unsafe_allow_html=True)
 
 
 
@@ -354,6 +362,11 @@ b {
 """, unsafe_allow_html=True)
 
         linePlot = balSeries()
+
+        # if show_trendline:
+        #     linePlot.update_traces(trendline='lowess', trendline_scope='overall', trendline_options=dict(frac=0.1), trendline_color_override='red')
+        # else:
+        #     linePlot.update_traces(trendline=None)
 
         col1, col2 = st.columns(2)
         with col1:
