@@ -56,7 +56,6 @@ try:
 
 
     if final == '':
-        st.write("Sample File: 'posb_statement_1.pdf'")
         final = 204.67
     else:
         if not re.match("^[0-9]+(\.[0-9]*)?$", final):
@@ -83,7 +82,7 @@ try:
             f.write(pdf_file.getbuffer())
             print('PDF Saved')
 
-    # @st.cache_data
+    @st.cache_data
     def parsePOSBData(file):
             tables = camelot.read_pdf(f'statements/{file}', flavor='stream', pages='all')
             concat = tables[0].df
@@ -207,7 +206,7 @@ try:
         
             return concat
     
-
+    @st.cache_data
     def parseDBSData(file):
         tables = camelot.read_pdf(f'statements/{file}', flavor='stream', pages='all')
         concat = tables[0].df
