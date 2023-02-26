@@ -177,7 +177,7 @@ try:
         
     ## SET FILE PATH
     directory = os.getcwd()
-    path = 'statements'
+    path = '../statements'
     filenames = os.listdir(path)
     progress = st.progress(0)
     status = st.empty()
