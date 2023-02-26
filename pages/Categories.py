@@ -20,57 +20,59 @@ st.title('Categories')
 st.subheader('Edit Dashboard Categories')
 st.write('')
 
-
-st.markdown('<h5>Select Food Outlets</h5>', unsafe_allow_html=True)
-foodOptions = ['McDonalds', 'Burger King', 'Starbucks', 'Subway']
-selectedFood = st.multiselect(label='selectedFood', options=foodOptions, label_visibility='hidden')
-st.text_area('Others...', placeholder='Din Tai Fung, Subway, Wine Connection...')
-
-
-
-## ONLINE SHOPPING
-st.write('')
-st.markdown('<h5>Select E-Shopping Platforms</h5>', unsafe_allow_html=True)
-shopOptions = ['Shopee', 'Lazada', 'Tao Bao', 'Ebay', 'Amazon', 'Wish']
-selectedShops = st.multiselect(label='selectedShops', options=shopOptions, label_visibility='hidden')
-
-# shopee = st.checkbox('Shopee')
-# lazada = st.checkbox('Lazada')
-# taobao = st.checkbox('Tao Bao')
-# ebay = st.checkbox('Ebay')
-# amazon = st.checkbox('Amazon')
-# wish = st.checkbox("Wish")
-otherShops = st.text_area(label='Others...', placeholder='Drop, Banggood...')
+with st.form('form'):
+    st.markdown('<h5>Select Food Outlets</h5>', unsafe_allow_html=True)
+    foodOptions = ['McDonalds', 'Burger King', 'Starbucks', 'Subway']
+    selectedFood = st.multiselect(label='selectedFood', options=foodOptions, label_visibility='hidden')
+    st.text_area('Others...', placeholder='Din Tai Fung, Subway, Wine Connection...')
 
 
 
-## SUPERMARKETS
-st.write('')
-st.markdown('<h5>Select Grocers</h5>', unsafe_allow_html=True)
-grocerOptions = ['Fairprice/NTUC', 'Cold Storage', 'Marketplace', 'Giant', 'Jasons', "Ryan's"]
-selectedGrocers = st.multiselect(label='selectedGrocers', options=grocerOptions, label_visibility='hidden')
+    ## ONLINE SHOPPING
+    st.write('')
+    st.markdown('<h5>Select E-Shopping Platforms</h5>', unsafe_allow_html=True)
+    shopOptions = ['Shopee', 'Lazada', 'Tao Bao', 'Ebay', 'Amazon', 'Wish']
+    selectedShops = st.multiselect(label='selectedShops', options=shopOptions, label_visibility='hidden')
 
-# ntuc = st.checkbox('Fairprice/NTUC')
-# cs = st.checkbox('Cold Storage')
-# market = st.checkbox('Marketplace')
-# giant = st.checkbox('Giant')
-# jasons = st.checkbox('Jasons')
-# ryans  = st.checkbox("Ryan's Grocery")
-otherGrocers = st.text_area(label='Others...', placeholder="Little Farms, Hao's Supermarket...")
+    # shopee = st.checkbox('Shopee')
+    # lazada = st.checkbox('Lazada')
+    # taobao = st.checkbox('Tao Bao')
+    # ebay = st.checkbox('Ebay')
+    # amazon = st.checkbox('Amazon')
+    # wish = st.checkbox("Wish")
+    otherShops = st.text_area(label='Others...', placeholder='Drop, Banggood...')
 
 
 
-## TRANSPORT
-st.write('')
-transportLabel = st.markdown('<h5>Select Transport Apps</h5>', unsafe_allow_html=True)
-transportOptions = ['Grab', 'Gojek', 'Comfort Delgro', 'Ta-Da']
-selectedTransport = st.multiselect(label='selectedTransport', options=transportOptions, label_visibility='hidden')
+    ## SUPERMARKETS
+    st.write('')
+    st.markdown('<h5>Select Grocers</h5>', unsafe_allow_html=True)
+    grocerOptions = ['Fairprice/NTUC', 'Cold Storage', 'Marketplace', 'Giant', 'Jasons', "Ryan's"]
+    selectedGrocers = st.multiselect(label='selectedGrocers', options=grocerOptions, label_visibility='hidden')
 
-# grab = st.checkbox('Grab')
-# gojek = st.checkbox('Gojek')
-# cdg = st.checkbox('Comfort Delgro')
-# tada = st.checkbox('Ta-Da')
-otherTransport = st.text_area(label='Others...', placeholder='Ryde, BlueSG...')
+    # ntuc = st.checkbox('Fairprice/NTUC')
+    # cs = st.checkbox('Cold Storage')
+    # market = st.checkbox('Marketplace')
+    # giant = st.checkbox('Giant')
+    # jasons = st.checkbox('Jasons')
+    # ryans  = st.checkbox("Ryan's Grocery")
+    otherGrocers = st.text_area(label='Others...', placeholder="Little Farms, Hao's Supermarket...")
+
+
+
+    ## TRANSPORT
+    st.write('')
+    transportLabel = st.markdown('<h5>Select Transport Apps</h5>', unsafe_allow_html=True)
+    transportOptions = ['Grab', 'Gojek', 'Comfort Delgro', 'Ta-Da']
+    selectedTransport = st.multiselect(label='selectedTransport', options=transportOptions, label_visibility='hidden')
+
+    # grab = st.checkbox('Grab')
+    # gojek = st.checkbox('Gojek')
+    # cdg = st.checkbox('Comfort Delgro')
+    # tada = st.checkbox('Ta-Da')
+    otherTransport = st.text_area(label='Others...', placeholder='Ryde, BlueSG...')
+
+    st.form_submit_button('Update')
 
 
 st.markdown("""
