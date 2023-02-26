@@ -75,6 +75,6 @@ tzlocal==4.2
 urllib3==1.26.14
 validators==0.20.0
 watchdog==2.3.0
-xlrd==0.7.1
+xlrd==2.0.1
 xlwt==0.7.2
 zipp==3.15.0
