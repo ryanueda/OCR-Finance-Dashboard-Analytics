@@ -66,6 +66,7 @@ try:
             f.write(pdf_file.getbuffer())
             print('PDF Saved')
 
+    @st.cache_data
     def parseData(file):
             tables = camelot.read_pdf(f'statements/{file}', flavor='stream', pages='all')
             concat = tables[0].df

@@ -63,7 +63,7 @@ st.sidebar.markdown('<h1 class="socials">My Socials</h1>', unsafe_allow_html=Tru
 st.sidebar.markdown('''<p class="socials">
                Interested in my works? Check out my <a href='https://github.com/ryanueda'>GitHub</a>, 
                or my <a href='https://linkedin.com/in/https://www.linkedin.com/in/ryan-ueda-teo-b32964212/'>LinkedIn</a>. 
-               For my Personal Portfolio, you can view it <a href='ryanueda.netlify.app'>here</a>. </p>
+               For my Personal Portfolio, you can view it <a href='https://ryanueda.netlify.app'>here</a>. </p>
                 ''', unsafe_allow_html=True)
 
 st.sidebar.markdown('\n')
