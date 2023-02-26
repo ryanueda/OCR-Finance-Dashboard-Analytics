@@ -74,7 +74,7 @@ try:
         pdf_file = io.BytesIO(pdf_contents)
         pdf_base64 = base64.b64encode(pdf_file.read()).decode('utf-8')
         
-        if bank == 'posb':
+        if bank == 'POSB':
             bankName = 'posb'
         else:
             bankName = 'dbs'
@@ -319,11 +319,12 @@ try:
 
         for pdf in range(len(filenames)):
             status.text(f'Analysing File {pdf+1}...')
-            if filenames[pdf][:3] == 'posb':
+            if filenames[pdf][:3] == 'pos':
                 concat = parsePOSBData(filenames[pdf])
 
             if filenames[pdf][:3] == 'dbs':
                 concat = parseDBSData(filenames[pdf])
+
             concatList.append(concat)
             noFiles = len(filenames)
             progVal = int(80/noFiles)
