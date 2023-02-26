@@ -26,7 +26,7 @@ st.markdown('<h3>What Does This Website Do?</h3>', unsafe_allow_html=True)
 st.markdown('''This website takes in DBS/POSB Bank Statements in the form of PDF, and uses <b>Optical Character Recognition (OCR)</b> tecghnology 
          to scan the PDF for table data consisting of your transactions, and wrangles this data to produce a vast selection of interactive visualizations 
          and statistical analytics for you to better understand your own financial standing.''', unsafe_allow_html=True)
-st.markdown('<div class="button"><a href="https://www.instagram.com"><p class="text">Go To Dashboard</p></a></div>', unsafe_allow_html=True)
+st.markdown('<div class="button"><a href="https://ryanueda.streamlit.app/Dashboard"><p class="text">Go To Dashboard</p></a></div>', unsafe_allow_html=True)
 st.write('')
 st.write('')
 

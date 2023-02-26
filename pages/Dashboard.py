@@ -178,8 +178,6 @@ try:
     ## SET FILE PATH
     directory = os.getcwd()
     path = directory + '/statements'
-    # path = '../statements/'
-    st.write(path)
     filenames = os.listdir(path)
     progress = st.progress(0)
     status = st.empty()
