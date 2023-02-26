@@ -33,8 +33,8 @@ st.write('')
 st.markdown('<h3>How Do I Use It?</h3>', unsafe_allow_html=True)
 st.markdown('''
             1) Log In to your DBS/POSB Website
-            2) Download transaction history according to the date range you desire in PDF, with the naming convention <b>'statement_{number}'</b>, with the oldest transactions being number 1 \n
-            (<b>WARNING:</b> <i>Do Not Use Microsoft Print To PDF</i>) \n
+            2) Click Print to download transaction history according to the date range you desire in PDF, with the naming convention <b>'statement_{number}'</b>, with the oldest transactions being number 1 \n
+            (<b>WARNING:</b> <i>Do Not Use Microsoft Print To PDF, use Save As PDF</i>) \n
             3) Head over to the <i>'Dashboard'</i> page
             4) Input your PDF Bank Statements in the sidebar File Upload widget
             5) That's It! Allow our program some time to analyse your files, and view your personalized dashboard :)
