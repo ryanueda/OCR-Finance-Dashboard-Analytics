@@ -245,9 +245,9 @@ try:
 
             sumDF['Debit'] = sumDF['Debit'].astype(float)
             sumDF['Credit'] = sumDF['Credit'].astype(float)
-            sumDF['Date'] = sumDF['Date'].str[-4:]
 
-            years = sumDF['Date'].unique()
+            sumDF['Date'] = pd.to_datetime(sumDF['Date']).dt.year
+            # sumDF['Date'] = sumDF['Date'].str[-4:]
 
             color_map = {'Debit': 'rgb(228,26,28)', 'Credit': 'rgb(55,126,184)'}
 
@@ -296,6 +296,7 @@ try:
             return fig
 
 
+        concat['Date'] = pd.to_datetime(concat['Date'])
         concat.to_excel('parsed.xlsx')
         with open('parsed.xlsx', 'rb') as f:
             bytes_data = f.read()

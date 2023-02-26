@@ -127,6 +127,12 @@ h3 {
 
 .coffee {
     border-radius: 17px;
+    transition: all 0.2s ease-in-out;
+}
+
+.coffee:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .socials {
