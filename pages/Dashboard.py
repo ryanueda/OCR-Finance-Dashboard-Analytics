@@ -178,7 +178,10 @@ try:
     ## SET FILE PATH
     directory = os.getcwd()
     path = directory + '/statements'
-    filenames = os.listdir(path)
+    try:
+        filenames = os.listdir(path)
+    except FileNotFoundError:
+        pass
     progress = st.progress(0)
     status = st.empty()
     concatList = []
