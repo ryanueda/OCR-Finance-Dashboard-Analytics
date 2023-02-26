@@ -12,6 +12,7 @@ import glob
 import plotly.offline as pyo
 import plotly.graph_objs as go
 import streamlit.components.v1 as components
+import re
 
 
 ## HEADER
@@ -38,6 +39,16 @@ st.sidebar.subheader('')
 
 ## FILE UPLOAD
 uploaded_files = st.sidebar.file_uploader("Upload Your Bank Statement", type=['pdf'], accept_multiple_files=True)
+final = st.sidebar.text_input('Enter Final Bank Balance :moneybag:', placeholder="Your Bank Balance")
+
+if final == '':
+    final = 204.67
+else:
+    if not re.match("^[0-9]+(\.[0-9]*)?$", final):
+        st.warning("Please enter a valid float or integer value.")
+
+final = float(final)
+
 for uploaded_file in uploaded_files:
     bytes_data = uploaded_file.read() 
 
@@ -202,7 +213,7 @@ try:
 
         ## WRANGLING
         concat['Balance'] = ''
-        final = 204.47
+        # final = 204.47
         concat.at[concat.shape[0]-1, 'Balance'] = 'S$' + str(204.47)
         index = concat.shape[0]-2
 
@@ -295,9 +306,53 @@ try:
         
         totalDrCr = totalDrCr()
         dr, cr = sumDrCr()
+        if dr == 2548.24 and cr == 2498.06:
+            st.markdown('Below Is A Sample File & Dashboard', unsafe_allow_html=True)
         st.write('')
-        st.write('Total Debit: S$' + str(dr))
-        st.write('Total Credit: S$' + str(cr))
+
+        column1, column2, column3 = st.columns(3)
+        with column1:
+            st.markdown(f'''
+                        <div class="stats"><b>Total Debit</b</div>
+                        <h3>${dr}</h3>
+                        ''', unsafe_allow_html=True)
+        with column2:
+            st.markdown(f'''
+                        <div class="stats"><b>Total Credit</b</div>
+                        <h3>${cr}</h3>
+                        ''', unsafe_allow_html=True)
+        with column3:
+            st.markdown(f'''
+                        <div class="stats"><b>Current Balance</b</div>
+                        <h3>${final}</h3>
+                        ''', unsafe_allow_html=True)
+        st.markdown("""
+<style>
+.stats {
+    width: 200px;
+    height: 70px;
+    border: 1px solid #d3d3d3;
+    border-radius: 15px;
+    background-color: white;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+    margin-bottom: 20%;
+}
+
+.stats:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+b {
+    font-family: 'Century Gothic', serif;
+    font-weight: 800;
+    text-align: center;
+    margin-top: 5px;
+}
+</style>
+""", unsafe_allow_html=True)
+
         linePlot = balSeries()
 
         col1, col2 = st.columns(2)
