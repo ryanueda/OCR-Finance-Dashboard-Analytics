@@ -17,10 +17,10 @@ import streamlit.components.v1 as components
 ## HEADER
 st.set_page_config(page_title='Landing Site')
 st.markdown('<h1>Landing Site</h1>', unsafe_allow_html=True)
-st.subheader("The Official Landing Site Of Ryan's Financial Analytics")
+st.subheader("The Official Landing Site Of This Project")
 st.write('')
 
-st.write('\nWelcome! This is the official landing site of my Personal Finances Analytics & Dashboard Web App.')
+st.write('\nWelcome :wave: This is the official landing site of my Personal Finances Analytics & Dashboard Web App.')
 
 st.markdown('<h3>What Does This Website Do?</h3>', unsafe_allow_html=True)
 st.markdown('''This website takes in DBS/POSB Bank Statements in the form of PDF, and uses <b>Optical Character Recognition (OCR)</b> technology 
