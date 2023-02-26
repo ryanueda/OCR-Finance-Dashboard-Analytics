@@ -37,24 +37,36 @@ st.markdown("""
 st.sidebar.markdown('<h1 class="big-font">Upload & Filter</h1>', unsafe_allow_html=True)
 st.sidebar.subheader('')
 
-## FILE UPLOAD
-uploaded_files = st.sidebar.file_uploader("Upload Your Bank Statement", type=['pdf'], accept_multiple_files=True)
-st.sidebar.write('')
-final = st.sidebar.text_input('Enter Final Bank Balance :moneybag:', placeholder="Your Bank Balance")
-
-if final == '':
-    final = 204.67
-else:
-    if not re.match("^[0-9]+(\.[0-9]*)?$", final):
-        st.warning("Please enter a valid float or integer value.")
-
-final = float(final)
-
-for uploaded_file in uploaded_files:
-    bytes_data = uploaded_file.read() 
-
 
 try:
+    ## FILE UPLOAD
+    uploaded_files = st.sidebar.file_uploader("Upload Your Bank Statement", type=['pdf'], accept_multiple_files=True)
+    st.sidebar.write('')
+    final = st.sidebar.text_input('Enter Final Bank Balance :moneybag:', placeholder="Your Bank Balance")
+    bank = st.sidebar.radio('Bank', options=['DBS', 'POSB'])
+
+    if uploaded_files != '':
+        directory = os.getcwd()
+        path = directory + '/statements'
+        files = os.listdir(path)
+
+        for file in files:
+            file_path = os.path.join(path, file)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+
+
+    if final == '':
+        final = 204.67
+    else:
+        if not re.match("^[0-9]+(\.[0-9]*)?$", final):
+            st.warning("Please enter a valid float or integer value.")
+
+    final = float(final)
+
+    for uploaded_file in uploaded_files:
+        bytes_data = uploaded_file.read() 
+
     directory = os.getcwd()
     path = directory + '/statements'
     for pdf in range(len(uploaded_files)):
@@ -62,12 +74,17 @@ try:
         pdf_file = io.BytesIO(pdf_contents)
         pdf_base64 = base64.b64encode(pdf_file.read()).decode('utf-8')
         
-        with open(f'{path}/statement_{pdf+1}.pdf', 'wb') as f:
+        if bank == 'posb':
+            bankName = 'posb'
+        else:
+            bankName = 'dbs'
+
+        with open(f'{path}/{bankName}_statement_{pdf+1}.pdf', 'wb') as f:
             f.write(pdf_file.getbuffer())
             print('PDF Saved')
 
-    @st.cache_data
-    def parseData(file):
+    # @st.cache_data
+    def parsePOSBData(file):
             tables = camelot.read_pdf(f'statements/{file}', flavor='stream', pages='all')
             concat = tables[0].df
 
@@ -189,6 +206,106 @@ try:
             concat = concat.reset_index(drop=True)
         
             return concat
+    
+
+    def parseDBSData(file):
+        tables = camelot.read_pdf(f'statements/{file}', flavor='stream', pages='all')
+        concat = tables[0].df
+
+        for i in range(1, len(tables)):
+            concat = pd.concat([concat, tables[i].df])
+
+        concat = concat.drop(index=0)
+        concat = concat.drop(index=1)
+        concat = concat.reset_index(drop=True)
+        concat.columns = ['Date', 'Extra', 'Code', 'Reference', 'Debit', 'Extra2', 'Credit']
+        concat = concat.drop(columns=['Extra'])
+        concat = concat.drop(index=0)
+        concat = concat.drop(index=1)
+        concat.columns = ['Date', 'Code', 'Reference', 'Debit', 'Extra', 'Credit']
+        concat = concat.reset_index(drop=True)
+
+        for row in range(len(concat)):
+            debit = concat.at[row, 'Debit']
+            credit = concat.at[row, 'Credit']
+            extraVal = concat.at[row, 'Extra']
+
+            if debit == '' and credit != '':
+                concat.at[row, 'Debit'] = credit
+                concat.at[row, 'Credit'] = ''
+            
+            if credit == '' and extraVal != '':
+                concat.at[row, 'Credit'] = extraVal
+                concat.at[row, 'Extra'] = ''
+
+        concat = concat.drop(columns=['Extra'])
+
+        for a in range(len(concat)):
+            code = concat.at[a, 'Code']
+            steps = 0
+            
+            if code != '':
+                addArr = []
+                index = a + 1
+                
+                while True:
+                    if index > len(concat)-1:
+                        break
+                        
+                    check = concat.at[index, 'Code']
+                    if check == '':
+                        addArr.append(concat.at[index, 'Reference'])
+                        steps += 1
+                        index += 1
+                    else:
+                        break
+                    
+                for step in range(steps):
+                    if concat.at[a, 'Reference'][-1] == '-' or concat.at[a, 'Reference'][-1].isdigit() == True:
+                        concat.at[a, 'Reference'] += concat.at[a+step+1, 'Reference']
+                    else:
+                        concat.at[a, 'Reference'] += ' ' + concat.at[a+step+1, 'Reference']
+                        
+                    concat.at[a+step+1, 'Reference'] = ''
+
+        ## remove all empty rows
+        concat = concat.loc[~(concat == '').all(axis=1)]
+        concat = concat.reset_index(drop=True)
+
+        for TYPE in range(len(concat)):
+            code = concat.at[TYPE, 'Code']
+            
+            if code == 'MST':
+                concat.at[TYPE, 'Type'] = 'Card Transaction'
+                
+            if code == 'ITR' or code == 'ICT':
+                concat.at[TYPE, 'Type'] = 'Funds Transfer'
+                
+            if code == 'POS':
+                concat.at[TYPE, 'Type'] = 'Point-Of-Sale'
+                
+            if code == 'INT':
+                concat.at[TYPE, 'Type'] = 'Interest Earned'
+
+            if code == 'ADV':
+                concat.at[TYPE, 'Type'] = 'PayLah'
+
+        concat = concat.reindex(index=concat.index[::-1])
+        concat.reset_index(drop=True)
+
+        concat = concat.loc[~((concat['Date'] == 'Date') & (concat['Code'] == 'Code'))]
+        concat = concat.loc[~((concat['Debit'] == 'Download') & (concat['Credit'] == 'Print'))]
+        concat = concat.loc[~((concat['Debit'] == '(Withdrawal)') & concat['Credit'] == '(Deposit)')]
+        concat = concat.replace('', np.nan)
+        concat = concat.dropna(thresh=len(concat.columns) - 3)
+        concat = concat.reset_index(drop=True)
+        concat = concat.loc[~((concat['Date'].str.contains('Transaction History')))]
+        concat = concat.reset_index(drop=True)
+        concat = concat.reindex(columns=['Date', 'Code', 'Type', 'Reference', 'Debit', 'Credit'])
+    
+        return concat
+
+
         
     ## SET FILE PATH
     directory = os.getcwd()
@@ -199,9 +316,14 @@ try:
         status = st.empty()
         concatList = []
 
+
         for pdf in range(len(filenames)):
             status.text(f'Analysing File {pdf+1}...')
-            concat = parseData(filenames[pdf])
+            if filenames[pdf][:3] == 'posb':
+                concat = parsePOSBData(filenames[pdf])
+
+            if filenames[pdf][:3] == 'dbs':
+                concat = parseDBSData(filenames[pdf])
             concatList.append(concat)
             noFiles = len(filenames)
             progVal = int(80/noFiles)
@@ -216,8 +338,9 @@ try:
         ## WRANGLING
         concat['Balance'] = ''
         # final = 204.47
-        concat.at[concat.shape[0]-1, 'Balance'] = 'S$' + str(204.47)
+        concat.at[concat.shape[0]-1, 'Balance'] = 'S$' + str(final)
         index = concat.shape[0]-2
+
 
         totalDr = totalCr = 0
         for agg in range(len(concat)):
@@ -387,10 +510,10 @@ b {
 
         progress.progress(100)
         status.text('Done !')
-    except FileNotFoundError:
+    except Exception as e:
+        # st.write(e)
         pass
    
 
-except Exception as e:
-    st.write(e)
+except FileNotFoundError:
     pass
