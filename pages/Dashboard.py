@@ -43,12 +43,14 @@ for uploaded_file in uploaded_files:
 
 
 try:
+    directory = os.getcwd()
+    path = directory + '/statements'
     for pdf in range(len(uploaded_files)):
         pdf_contents = uploaded_file.getvalue()
         pdf_file = io.BytesIO(pdf_contents)
         pdf_base64 = base64.b64encode(pdf_file.read()).decode('utf-8')
         
-        with open(f'statements/statement_{pdf+1}.pdf', 'wb') as f:
+        with open(f'{path}/statement_{pdf+1}.pdf', 'wb') as f:
             f.write(pdf_file.getbuffer())
             print('PDF Saved')
 
