@@ -39,6 +39,7 @@ st.sidebar.subheader('')
 
 ## FILE UPLOAD
 uploaded_files = st.sidebar.file_uploader("Upload Your Bank Statement", type=['pdf'], accept_multiple_files=True)
+st.sidebar.write('')
 final = st.sidebar.text_input('Enter Final Bank Balance :moneybag:', placeholder="Your Bank Balance")
 
 if final == '':
@@ -289,7 +290,7 @@ try:
             if not show_trendline:
                 fig = px.scatter(grouped_df, x='Date', y='Balance', title='Time Series Of Bank Balance')
             else:
-                fig = px.scatter(grouped_df, x='Date', y='Balance', trendline='lowess', trendline_scope='overall', trendline_color_override='red', title='Time Series Of Bank Balance')
+                fig = px.scatter(grouped_df, x='Date', y='Balance', trendline="rolling", trendline_options=dict(window=5), trendline_scope='overall', trendline_color_override='red', title='Time Series Of Bank Balance')
             fig.update_traces(mode='lines')
 
             return fig
@@ -299,6 +300,7 @@ try:
         with open('parsed.xlsx', 'rb') as f:
             bytes_data = f.read()
 
+        st.sidebar.write('')
         st.sidebar.write('Download Excel File')
         st.sidebar.download_button('Download Excel', data=bytes_data, file_name='parsedStatements.xlsx', mime='xlsx')
         st.sidebar.write('')
