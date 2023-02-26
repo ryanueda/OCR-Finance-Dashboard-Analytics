@@ -21,6 +21,7 @@ st.subheader('Edit Dashboard Categories')
 st.write('')
 
 with st.form('form'):
+    st.image('images/food.jpg', use_column_width='always')
     st.markdown('<h5>Select Food Outlets</h5>', unsafe_allow_html=True)
     foodOptions = ['McDonalds', 'Burger King', 'Starbucks', 'Subway']
     selectedFood = st.multiselect(label='selectedFood', options=foodOptions, label_visibility='hidden')
@@ -30,6 +31,7 @@ with st.form('form'):
 
     ## ONLINE SHOPPING
     st.write('')
+    st.image('images/onlineshopping.jpg', use_column_width='always')
     st.markdown('<h5>Select E-Shopping Platforms</h5>', unsafe_allow_html=True)
     shopOptions = ['Shopee', 'Lazada', 'Tao Bao', 'Ebay', 'Amazon', 'Wish']
     selectedShops = st.multiselect(label='selectedShops', options=shopOptions, label_visibility='hidden')
@@ -46,6 +48,7 @@ with st.form('form'):
 
     ## SUPERMARKETS
     st.write('')
+    st.image('images/grocer.jpg', use_column_width='always')
     st.markdown('<h5>Select Grocers</h5>', unsafe_allow_html=True)
     grocerOptions = ['Fairprice/NTUC', 'Cold Storage', 'Marketplace', 'Giant', 'Jasons', "Ryan's"]
     selectedGrocers = st.multiselect(label='selectedGrocers', options=grocerOptions, label_visibility='hidden')
@@ -62,6 +65,7 @@ with st.form('form'):
 
     ## TRANSPORT
     st.write('')
+    st.image('images/transport.jpg', use_column_width='always')
     transportLabel = st.markdown('<h5>Select Transport Apps</h5>', unsafe_allow_html=True)
     transportOptions = ['Grab', 'Gojek', 'Comfort Delgro', 'Ta-Da']
     selectedTransport = st.multiselect(label='selectedTransport', options=transportOptions, label_visibility='hidden')
@@ -72,6 +76,7 @@ with st.form('form'):
     # tada = st.checkbox('Ta-Da')
     otherTransport = st.text_area(label='Others...', placeholder='Ryde, BlueSG...')
 
+    st.markdown('<br><br>', unsafe_allow_html=True)
     st.form_submit_button('Update')
 
 
@@ -81,5 +86,16 @@ st.markdown("""
 h5 {
     margin-top: 50px;
 }
+
+img {
+    width: 620px;
+    height: 350px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    margin-bottom: -50px;
+}
+
 </style>
 """, unsafe_allow_html=True)
