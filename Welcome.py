@@ -14,8 +14,10 @@ import plotly.graph_objs as go
 import streamlit.components.v1 as components
 
 
+
+
 ## HEADER
-st.set_page_config(page_title='Landing Site')
+st.set_page_config(page_title='Landing Site', initial_sidebar_state='expanded')
 st.markdown('<h1>Landing Site</h1>', unsafe_allow_html=True)
 st.subheader("The Official Landing Site Of This Project")
 st.write('')

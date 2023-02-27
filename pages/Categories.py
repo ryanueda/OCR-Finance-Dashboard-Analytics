@@ -14,8 +14,10 @@ import plotly.graph_objs as go
 import streamlit.components.v1 as components
 import re
 
+
+
 ## HEADER
-st.set_page_config(page_title='Categories')
+st.set_page_config(page_title='Categories', initial_sidebar_state='expanded')
 st.title('Categories')
 st.subheader('Edit Dashboard Categories')
 st.write('')

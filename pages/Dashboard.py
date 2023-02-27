@@ -15,8 +15,10 @@ import streamlit.components.v1 as components
 import re
 
 
+
+
 ## HEADER
-st.set_page_config(page_title='Dashboard Analytics')
+st.set_page_config(page_title='Dashboard Analytics', initial_sidebar_state='expanded')
 st.title('Personal Finances Dashboard')
 st.subheader('Graphs & Analytics')
 st.write('')
