@@ -18,7 +18,6 @@ import re
 
 ## HEADER
 st.set_page_config(page_title='Data Table', initial_sidebar_state='expanded')
-st.set_option("theme", "light")
 st.title('Data Table')
 st.subheader('All Data Used In Dashboard')
 st.write('')

@@ -1,0 +1,60 @@
+,Date,Code,Type,Reference,Debit,Credit
+0,02 Jan 2023,ITR,Funds Transfer,Funds Transfer 120-363917-2 : I-BANK ,S$700.00,
+1,02 Jan 2023,AWL,,"Cash Withdrawal 09093060,T PAYOH L6/19",,S$700.00
+2,02 Jan 2023,ITR,Funds Transfer,Funds Transfer 407-39969-2 : I-BANK,,S$80.00
+3,02 Jan 2023,ITR,Funds Transfer,Funds Transfer 407-46105-3 : I-BANK,,S$80.00
+4,05 Jan 2023,GRO,,Payments or Collections via GIRO PRUDENTIAL PACS BnC-P/N78233555 78233555,,"S$1,030.00"
+5,08 Jan 2023,ICT,Funds Transfer,FAST / PayNow Transfer Other 20230108OCBCSGSGBRT8337092OTHR,"S$2,000.00",
+6,08 Jan 2023,ICT,Funds Transfer,FAST / PayNow Transfer PayNow Transfer To: NICHOLAS KOH OTHR PayNow Transfer,,"S$1,825.00"
+7,08 Jan 2023,ICT,Funds Transfer,FAST / PayNow Transfer PayNow Transfer To: jolene OTHR PayNow Transfer,,S$70.00
+8,08 Jan 2023,ITR,Funds Transfer,Funds Transfer 407-39969-2 : I-BANK,,S$80.00
+9,08 Jan 2023,ITR,Funds Transfer,Funds Transfer 407-46105-3 : I-BANK,,S$80.00
+10,09 Jan 2023,ICT,Funds Transfer,FAST / PayNow Transfer Other 20230109OCBCSGSGBRT8525640OTHR,S$800.00,
+11,09 Jan 2023,ITR,Funds Transfer,Funds Transfer 001-105047-0 : I-BANK,,S$800.00
+12,11 Jan 2023,IBG,,Payments or Collections via GIRO FHG (SG) PIFHG-2301020041-XX0091024105BEXP,S$140.00,
+13,12 Jan 2023,IBG,,Payments or Collections via GIRO FHG (SG) PIFHG-2301017517-XX0091024105BEXP,S$120.00,
+14,12 Jan 2023,ICT,Funds Transfer,FAST / PayNow Transfer Incoming PayNow Ref 5172081From: LENA ONG LAY NAH OTHR Cny bak kwa,S$156.00,
+15,13 Jan 2023,ICT,Funds Transfer,FAST / PayNow Transfer PayNow Transfer To: Ivy Ling OTHR PayNow Transfer,,S$174.00
+16,16 Jan 2023,ITR,Funds Transfer,Funds Transfer 407-46105-3 : I-BANK 407-39969-2 : I-BANK,,S$80.00
+17,16 Jan 2023,ITR,Funds Transfer,Funds Transfer 407-46105-3 : I-BANK,,S$37.00
+18,17 Jan 2023,ICT,Funds Transfer,FAST / PayNow Transfer Other 20230117OCBCSGSGBRT2190589OTHR,"S$5,000.00",
+19,17 Jan 2023,ITR,Funds Transfer,Funds Transfer 120-363917-2 : I-BANK,,"S$2,500.00"
+20,17 Jan 2023,ICT,Funds Transfer,FAST / PayNow Transfer PayNow Transfer To: WUI HONG M&E ENGINEERING PT OTHR Sims Urban Oasis 16-26,,S$360.00
+21,17 Jan 2023,ITR,Funds Transfer,Funds Transfer 407-39969-2 : I-BANK,,S$300.00
+22,18 Jan 2023,ITR,Funds Transfer,Funds Transfer 407-39969-2 : I-BANK,,S$200.00
+23,18 Jan 2023,AWL,,"Cash Withdrawal 09093060,SIMS PL/52",,S$500.00
+24,19 Jan 2023,SAL,,Salary MOET HENNESSY ASIA P SAL-JAN23,"S$9,638.54",
+25,19 Jan 2023,ICT,Funds Transfer,FAST / PayNow Transfer PayNow Transfer To: Tay Siok Cheng OTHR PayNow Transfer,,S$30.00
+26,20 Jan 2023,ICT,Funds Transfer,FAST / PayNow Transfer CSL:0486891009:I-BANK funds transfer OTHR 102154214229,,"S$3,100.00"
+27,20 Jan 2023,ITR,Funds Transfer,Funds Transfer 001-105047-0 : I-BANK funds transfer,,"S$3,600.00"
+28,20 Jan 2023,BILL,,Bill Payment CCC -5520380010390686 : I-BANK,,S$562.35
+29,21 Jan 2023,ICT,Funds Transfer,FAST / PayNow Transfer PayNow Transfer To: Lena ong OTHR PayNow Transfer,,S$28.00
+30,21 Jan 2023,ICT,Funds Transfer,FAST / PayNow Transfer UOB:1443043042:I-BANK funds transfer OTHR 102163274393,,"S$2,000.00"
+31,23 Jan 2023,ITR,Funds Transfer,Funds Transfer 407-39969-2 : I-BANK,,S$20.00
+32,23 Jan 2023,ITR,Funds Transfer,Funds Transfer 407-39969-2 : I-BANK,,S$130.00
+33,25 Jan 2023,GRO,,Payments or Collections via GIRO PRUDENTIAL PACS BnC-P/N80630374 80630374407-46105-3 : I-BANK,,S$85.45
+34,28 Jan 2023,ITR,Funds Transfer,Funds Transfer TOP-UP TO PAYLAH! : Joey Ong,,S$5.10
+35,31 Jan 2023,INT,Interest Earned,Interest Earned,S$0.05,
+36,04 Feb 2023,ICT,Funds Transfer,FAST / PayNow Transfer PayNow Transfer To: jolene OTHR PayNow Transfer,,S$56.00
+37,06 Feb 2023,GRO,,Payments or Collections via GIRO PRUDENTIAL PACS BnC-P/N78233555 78233555,,"S$1,030.00"
+38,08 Feb 2023,ITR,Funds Transfer,Funds Transfer 407-46105-3 : I-BANK,,S$25.00
+39,12 Feb 2023,ICT,Funds Transfer,FAST / PayNow Transfer Other 20230212OCBCSGSGBRT3817093OTHR,"S$1,200.00",
+40,12 Feb 2023,ITR,Funds Transfer,Funds Transfer 120-363917-2 : I-BANK,,"S$1,200.00"
+41,14 Feb 2023,ICT,Funds Transfer,FAST / PayNow Transfer Incoming PayNow Ref 7730563From: CHEN FONG KENG OTHR PayNow Transfer,S$18.90,
+42,14 Feb 2023,ITR,Funds Transfer,Funds Transfer SEND BACK FROM PAYLAH! : 97554379,S$56.70,
+43,15 Feb 2023,AWL,,"Cash Withdrawal 09093060,SIMS PL/52",,S$100.00
+44,16 Feb 2023,IBG,,Payments or Collections via GIRO PRUDENTIAL ASSURANCE CO S'PORE (PTE Prudential Payment: SG7240086OTHR,S$750.00,
+45,17 Feb 2023,SAL,,Salary MOET HENNESSY ASIA P SAL-FEB23,"S$9,645.54",
+46,17 Feb 2023,ITR,Funds Transfer,Funds Transfer 001-105047-0 : I-BANK funds transfer,,"S$4,100.00"
+47,17 Feb 2023,BILL,,Bill Payment CCC -5520380010390686 : I-BANK,,S$576.77
+48,17 Feb 2023,ICT,Funds Transfer,FAST / PayNow Transfer CSL:0486891009:I-BANK funds transfer OTHR 102334677609,,"S$3,200.00"
+49,17 Feb 2023,ITR,Funds Transfer,Funds Transfer 126-17874-3 : I-BANK,,S$500.00
+50,18 Feb 2023,ICT,Funds Transfer,FAST / PayNow Transfer PayNow Transfer To: HAINANESE DELICACY PTE. LTD. OTHR Na 120-363917-2 : I-BANK,S$45.20,
+51,18 Feb 2023,AWL,,"Cash Withdrawal 09093060,NAC FPC 2",S$600.00,
+52,18 Feb 2023,ITR,Funds Transfer,Funds Transfer 407-39969-2 : I-BANK,S$80.00,
+53,18 Feb 2023,ITR,Funds Transfer,Funds Transfer 120-363917-2 : I-BANK,S$80.00,
+54,20 Feb 2023,ICT,Funds Transfer,FAST / PayNow Transfer PayNow Transfer To: HITPAY PAYMENTS -CUSTOMERS' OTHR DICNP167685684212808DDI2F,S$56.20,
+55,21 Feb 2023,POS,Point-Of-Sale,Point-of-Sale Transaction NETS QR PAYMENT TO: NATUREVEGEDELIGHTS,S$104.30,
+56,21 Feb 2023,ITR,Funds Transfer,Funds Transfer 120-363917-2 : I-BANK,S$100.00,
+57,21 Feb 2023,GRO,,Payments or Collections via GIRO PRUDENTIAL PACS BnC-P/N80630374 80630374,S$85.45,
+58,23 Feb 2023,ITR,Funds Transfer,Funds Transfer 120-363917-2 : I-BANK,S$100.00,

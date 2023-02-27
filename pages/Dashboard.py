@@ -84,7 +84,7 @@ try:
             f.write(pdf_file.getbuffer())
             print('PDF Saved')
 
-    @st.cache_data
+
     def parsePOSBData(file):
             tables = camelot.read_pdf(f'statements/{file}', flavor='stream', pages='all')
             concat = tables[0].df
@@ -184,15 +184,33 @@ try:
                 
                 if code == 'MST':
                     concat.at[TYPE, 'Type'] = 'Card Transaction'
-                    
+                
                 if code == 'ITR' or code == 'ICT':
                     concat.at[TYPE, 'Type'] = 'Funds Transfer'
                     
                 if code == 'POS':
                     concat.at[TYPE, 'Type'] = 'Point-Of-Sale'
+
+                if code == 'ICT':
+                    concat.at[TYPE, 'Type'] = 'PayNow'
                     
                 if code == 'INT':
                     concat.at[TYPE, 'Type'] = 'Interest Earned'
+
+                if code == 'ADV':
+                    concat.at[TYPE, 'Type'] = 'PayLah'
+
+                if code == 'GRO' or code == 'IBG':
+                    concat.at[TYPE, 'Type'] = 'GIRO'
+
+                if code == 'AWL':
+                    concat.at[TYPE, 'Type'] = 'ATM Withdrawal'
+
+                if code == 'SAL':
+                    concat.at[TYPE, 'Type'] = 'Salary'
+
+                if code == 'BILL':
+                    concat.at[TYPE, 'Type'] = 'Credit Card Bill'
 
             concat = concat.reindex(index=concat.index[::-1])
             concat.reset_index(drop=True)
@@ -208,7 +226,7 @@ try:
         
             return concat
     
-    @st.cache_data
+
     def parseDBSData(file):
         tables = camelot.read_pdf(f'statements/{file}', flavor='stream', pages='all')
         concat = tables[0].df
@@ -219,8 +237,13 @@ try:
         concat = concat.drop(index=0)
         concat = concat.drop(index=1)
         concat = concat.reset_index(drop=True)
-        concat.columns = ['Date', 'Extra', 'Code', 'Reference', 'Debit', 'Extra2', 'Credit']
-        concat = concat.drop(columns=['Extra'])
+
+        if concat.shape[1] == 7:
+            concat.columns = ['Date', 'Extra', 'Code', 'Reference', 'Debit', 'Extra2', 'Credit']
+            concat = concat.drop(columns=['Extra'])
+        else:
+            concat.columns = ['Date', 'Code', 'Reference', 'Debit', 'Extra2', 'Credit']
+
         concat = concat.drop(index=0)
         concat = concat.drop(index=1)
         concat.columns = ['Date', 'Code', 'Reference', 'Debit', 'Extra', 'Credit']
@@ -284,12 +307,27 @@ try:
                 
             if code == 'POS':
                 concat.at[TYPE, 'Type'] = 'Point-Of-Sale'
+
+            if code == 'ICT':
+                concat.at[TYPE, 'Type'] = 'PayNow'
                 
             if code == 'INT':
                 concat.at[TYPE, 'Type'] = 'Interest Earned'
 
             if code == 'ADV':
                 concat.at[TYPE, 'Type'] = 'PayLah'
+
+            if code == 'GRO' or code == 'IBG':
+                concat.at[TYPE, 'Type'] = 'GIRO'
+
+            if code == 'AWL':
+                concat.at[TYPE, 'Type'] = 'ATM Withdrawal'
+
+            if code == 'SAL':
+                concat.at[TYPE, 'Type'] = 'Salary'
+
+            if code == 'BILL':
+                concat.at[TYPE, 'Type'] = 'Credit Card Bill'
 
         concat = concat.reindex(index=concat.index[::-1])
         concat.reset_index(drop=True)
@@ -349,14 +387,14 @@ try:
 
             if concat.at[index, 'Debit'] != '':
                 if isinstance(concat.at[index, 'Debit'], float) == False:
-                    update = final - float(concat.at[index, 'Debit'][2:])
-                    totalDr += float(concat.at[index, 'Debit'][2:])
+                    update = final - float(concat.at[index, 'Debit'][2:].replace(',', ''))
+                    totalDr += float(concat.at[index, 'Debit'][2:].replace(',', ''))
                     concat.at[index, 'Balance'] = 'S$' + str(round(update, 2))
 
             if concat.at[index, 'Credit'] != '':
                 if isinstance(concat.at[index, 'Credit'], float) == False:
-                    update = final + float(concat.at[index, 'Credit'][2:])
-                    totalCr += float(concat.at[index, 'Credit'][2:])
+                    update = final + float(concat.at[index, 'Credit'][2:].replace(',', ''))
+                    totalCr += float(concat.at[index, 'Credit'][2:].replace(',', ''))
                     concat.at[index, 'Balance'] = 'S$' + str(round(update, 2))
 
             if index != 0:
@@ -369,8 +407,8 @@ try:
             sumDF['Debit'] = sumDF['Debit'].str[2:]
             sumDF['Credit'] = sumDF['Credit'].str[2:]
 
-            sumDF['Debit'] = sumDF['Debit'].astype(float)
-            sumDF['Credit'] = sumDF['Credit'].astype(float)
+            sumDF['Debit'] = sumDF['Debit'].str[2:].replace(',', '').astype(float)
+            sumDF['Credit'] = sumDF['Credit'].str[2:].replace(',', '').astype(float)
 
             sumDF['Date'] = pd.to_datetime(sumDF['Date']).dt.year
             # sumDF['Date'] = sumDF['Date'].str[-4:]
@@ -394,10 +432,10 @@ try:
 
         def sumDrCr():
             sumDF = concat.copy()
-            sumDF['Debit'] = sumDF['Debit'].str[2:]
-            sumDF['Credit'] = sumDF['Credit'].str[2:]
-            sumDF['Debit'] = sumDF['Debit'].astype(float)
-            sumDF['Credit'] = sumDF['Credit'].astype(float)
+            sumDF['Debit'] = sumDF['Debit'].str[2:].replace(',', '')
+            sumDF['Credit'] = sumDF['Credit'].str[2:].replace(',', '')
+            sumDF['Debit'] = sumDF['Debit'].str[2:].replace(',', '').astype(float)
+            sumDF['Credit'] = sumDF['Credit'].str[2:].replace(',', '').astype(float)
             dr = round(sumDF['Debit'].sum(), 2)
             cr = round(sumDF['Credit'].sum(), 2)
             return dr, cr
@@ -513,10 +551,10 @@ b {
         progress.progress(100)
         status.text('Done !')
     except Exception as e:
-        # st.write(e)
+        st.write(e)
         pass
    
 
 except Exception as e:
-    # st.write(e)
+    st.write(e)
     pass
