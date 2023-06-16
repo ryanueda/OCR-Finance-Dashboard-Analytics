@@ -50,7 +50,7 @@ pandas==1.5.3
 parso==0.8.3
 patsy==0.5.3
 pbr==5.11.1
-pdftopng==0.2.3
+pdftopng
 pickleshare==0.7.5
 Pillow==9.4.0
 platformdirs==3.0.0
