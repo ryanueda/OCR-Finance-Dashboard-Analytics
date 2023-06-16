@@ -46,15 +46,12 @@ pyparsing==3.0.9
 PyPDF2==2.12.1
 pyrsistent==0.19.3
 python-dateutil==2.8.2
-pytz==2023.3
-pytz-deprecation-shim==0.1.0.post0
+pytz
+pytz-deprecation-shim
 requests==2.31.0
 rich==13.4.2
 six==1.16.0
 smmap==5.0.0
-SQLAlchemy==0.7.10
-sqlalchemy-migrate==0.11.0
-sqlparse==0.4.4
 streamlit==1.23.1
 Tempita==0.5.2
 tenacity==8.2.2
