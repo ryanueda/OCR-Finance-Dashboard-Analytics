@@ -85,6 +85,7 @@ try:
             print('PDF Saved')
 
 
+    @st.cache_data
     def parsePOSBData(file):
             tables = camelot.read_pdf(f'statements/{file}', flavor='stream', pages='all')
             concat = tables[0].df
@@ -226,7 +227,7 @@ try:
         
             return concat
     
-
+    @st.cache_data
     def parseDBSData(file):
         tables = camelot.read_pdf(f'statements/{file}', flavor='stream', pages='all')
         concat = tables[0].df
@@ -546,6 +547,7 @@ b {
         
         st.plotly_chart(linePlot, use_container_width=True, sharing="streamlit")
 
+        st.dataframe(concat)
 
 
         progress.progress(100)

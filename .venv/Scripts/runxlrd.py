@@ -1,16 +1,9 @@
-# -*- coding: cp1252 -*-
-# <p>Copyright © 2005-2008 Stephen John Machin, Lingfo Pty Ltd</p>
-# <p>This script is part of the xlrd package, which is released under a
-# BSD-style licence.</p>
+#!C:\Users\rutsm\Downloads\web-scraper\.venv\Scripts\python.exe
+# Copyright (c) 2005-2012 Stephen John Machin, Lingfo Pty Ltd
+# This script is part of the xlrd package, which is released under a
+# BSD-style licence.
 
-# 2009-04-27 SJM Integrated on_demand patch by Armando Serrano Lombillo
-# 2008-08-03 SJM Omit counts of FORMAT/FONT/XF records when formatting_info is false
-# 2008-02-08 SJM Force formatting_info=1 for xfc command
-# 2007-12-05 SJM Fixed usage of deprecated/removed Book.raw_xf_list
-# 2007-10-13 SJM Added "fonts" command
-# 2007-06-10 SJM Removed reference to removed "trimming" option-value.
-# 2007-06-10 SJM Added documentation of commands.
-# 2007-06-10 SJM Changed cmds: dump -> biff_dump, count_records -> biff_count.
+from __future__ import print_function
 
 cmd_doc = """
 Commands:
@@ -38,25 +31,49 @@ xfc             Print "XF counts" and cell-type counts -- see code for details
 
 options = None
 if __name__ == "__main__":
-
-    PSYCO = 0
-
     import xlrd
-    import sys, time, glob, traceback, pprint, gc
+    import sys
+    import time
+    import glob
+    import traceback
+    import gc
+
+    from xlrd.timemachine import xrange, REPR
+
+
+    class LogHandler(object):
+
+        def __init__(self, logfileobj):
+            self.logfileobj = logfileobj
+            self.fileheading = None
+            self.shown = 0
+
+        def setfileheading(self, fileheading):
+            self.fileheading = fileheading
+            self.shown = 0
+
+        def write(self, text):
+            if self.fileheading and not self.shown:
+                self.logfileobj.write(self.fileheading)
+                self.shown = 1
+            self.logfileobj.write(text)
 
     null_cell = xlrd.empty_cell
 
     def show_row(bk, sh, rowx, colrange, printit):
-        if printit: print
+        if bk.ragged_rows:
+            colrange = range(sh.row_len(rowx))
+        if not colrange: return
+        if printit: print()
         if bk.formatting_info:
             for colx, ty, val, cxfx in get_row_data(bk, sh, rowx, colrange):
                 if printit:
-                    print "cell %s%d: type=%d, data: %r, xfx: %s" \
-                        % (xlrd.colname(colx), rowx+1, ty, val, cxfx)
+                    print("cell %s%d: type=%d, data: %r, xfx: %s"
+                        % (xlrd.colname(colx), rowx+1, ty, val, cxfx))
         else:
             for colx, ty, val, _unused in get_row_data(bk, sh, rowx, colrange):
                 if printit:
-                    print "cell %s%d: type=%d, data: %r" % (xlrd.colname(colx), rowx+1, ty, val)
+                    print("cell %s%d: type=%d, data: %r" % (xlrd.colname(colx), rowx+1, ty, val))
 
     def get_row_data(bk, sh, rowx, colrange):
         result = []
@@ -73,9 +90,8 @@ if __name__ == "__main__":
             if cty == xlrd.XL_CELL_DATE:
                 try:
                     showval = xlrd.xldate_as_tuple(cval, dmode)
-                except xlrd.XLDateError:
-                    e1, e2 = sys.exc_info()[:2]
-                    showval = "%s:%s" % (e1.__name__, e2)
+                except xlrd.XLDateError as e:
+                    showval = "%s:%s" % (type(e).__name__, e)
                     cty = xlrd.XL_CELL_ERROR
             elif cty == xlrd.XL_CELL_ERROR:
                 showval = xlrd.error_text_from_code.get(cval, '<Unknown error code 0x%02x>' % cval)
@@ -85,24 +101,26 @@ if __name__ == "__main__":
         return result
 
     def bk_header(bk):
-        print
-        print "BIFF version: %s; datemode: %s" \
-            % (xlrd.biff_text_from_num[bk.biff_version], bk.datemode)
-        print "codepage: %r (encoding: %s); countries: %r" \
-            % (bk.codepage, bk.encoding, bk.countries)
-        print "Last saved by: %r" % bk.user_name
-        print "Number of data sheets: %d" % bk.nsheets
-        print "Pickleable: %d; Use mmap: %d; Formatting: %d; On demand: %d" \
-            % (bk.pickleable, bk.use_mmap, bk.formatting_info, bk.on_demand)
+        print()
+        print("BIFF version: %s; datemode: %s"
+            % (xlrd.biff_text_from_num[bk.biff_version], bk.datemode))
+        print("codepage: %r (encoding: %s); countries: %r"
+            % (bk.codepage, bk.encoding, bk.countries))
+        print("Last saved by: %r" % bk.user_name)
+        print("Number of data sheets: %d" % bk.nsheets)
+        print("Use mmap: %d; Formatting: %d; On demand: %d"
+            % (bk.use_mmap, bk.formatting_info, bk.on_demand))
+        print("Ragged rows: %d" % bk.ragged_rows)
         if bk.formatting_info:
-            print "FORMATs: %d, FONTs: %d, XFs: %d" \
-                % (len(bk.format_list), len(bk.font_list), len(bk.xf_list))
-        print "Load time: %.2f seconds (stage 1) %.2f seconds (stage 2)" \
-            % (bk.load_time_stage_1, bk.load_time_stage_2)
-        print
+            print("FORMATs: %d, FONTs: %d, XFs: %d"
+                % (len(bk.format_list), len(bk.font_list), len(bk.xf_list)))
+        if not options.suppress_timing:
+            print("Load time: %.2f seconds (stage 1) %.2f seconds (stage 2)"
+                % (bk.load_time_stage_1, bk.load_time_stage_2))
+        print()
 
     def show_fonts(bk):
-        print "Fonts:"
+        print("Fonts:")
         for x in xrange(len(bk.font_list)):
             font = bk.font_list[x]
             font.dump(header='== Index %d ==' % x, indent=4)
@@ -110,26 +128,26 @@ if __name__ == "__main__":
     def show_names(bk, dump=0):
         bk_header(bk)
         if bk.biff_version < 50:
-            print "Names not extracted in this BIFF version"
+            print("Names not extracted in this BIFF version")
             return
         nlist = bk.name_obj_list
-        print "Name list: %d entries" % len(nlist)
+        print("Name list: %d entries" % len(nlist))
         for nobj in nlist:
             if dump:
                 nobj.dump(sys.stdout,
                     header="\n=== Dump of name_obj_list[%d] ===" % nobj.name_index)
             else:
-                print "[%d]\tName:%r macro:%r scope:%d\n\tresult:%r\n" \
-                    % (nobj.name_index, nobj.name, nobj.macro, nobj.scope, nobj.result)
+                print("[%d]\tName:%r macro:%r scope:%d\n\tresult:%r\n"
+                    % (nobj.name_index, nobj.name, nobj.macro, nobj.scope, nobj.result))
 
     def print_labels(sh, labs, title):
         if not labs:return
         for rlo, rhi, clo, chi in labs:
-            print "%s label range %s:%s contains:" \
-                % (title, xlrd.cellname(rlo, clo), xlrd.cellname(rhi-1, chi-1))
+            print("%s label range %s:%s contains:"
+                % (title, xlrd.cellname(rlo, clo), xlrd.cellname(rhi-1, chi-1)))
             for rx in xrange(rlo, rhi):
                 for cx in xrange(clo, chi):
-                    print "    %s: %r" % (xlrd.cellname(rx, cx), sh.cell_value(rx, cx))
+                    print("    %s: %r" % (xlrd.cellname(rx, cx), sh.cell_value(rx, cx)))
 
     def show_labels(bk):
         # bk_header(bk)
@@ -142,19 +160,20 @@ if __name__ == "__main__":
                 if not hdr:
                     bk_header(bk)
                     hdr = 1
-                print "sheet %d: name = %r; nrows = %d; ncols = %d" % \
-                    (shx, sh.name, sh.nrows, sh.ncols)
+                print("sheet %d: name = %r; nrows = %d; ncols = %d" %
+                    (shx, sh.name, sh.nrows, sh.ncols))
                 print_labels(sh, clabs, 'Col')
                 print_labels(sh, rlabs, 'Row')
+            if bk.on_demand: bk.unload_sheet(shx)
 
     def show(bk, nshow=65535, printit=1):
         bk_header(bk)
         if 0:
             rclist = xlrd.sheet.rc_stats.items()
-            rclist.sort()
-            print "rc stats"
+            rclist = sorted(rclist)
+            print("rc stats")
             for k, v in rclist:
-                print "0x%04x %7d" % (k, v)
+                print("0x%04x %7d" % (k, v))
         if options.onesheet:
             try:
                 shx = int(options.onesheet)
@@ -163,52 +182,50 @@ if __name__ == "__main__":
             shxrange = [shx]
         else:
             shxrange = range(bk.nsheets)
-        # print "shxrange", shxrange
+        # print("shxrange", list(shxrange))
         for shx in shxrange:
             sh = bk.sheet_by_index(shx)
             nrows, ncols = sh.nrows, sh.ncols
             colrange = range(ncols)
             anshow = min(nshow, nrows)
-            print "sheet %d: name = %r; nrows = %d; ncols = %d" % \
-                (shx, sh.name, sh.nrows, sh.ncols)
+            print("sheet %d: name = %s; nrows = %d; ncols = %d" %
+                (shx, REPR(sh.name), sh.nrows, sh.ncols))
             if nrows and ncols:
-                # Attempt to access the RHS corners
-                sh.row_types(0)[ncols-1]
-                sh.row_values(0)[ncols-1]
-                sh.row_types(nrows-1)[ncols-1]
-                sh.row_values(nrows-1)[ncols-1]
+                # Beat the bounds
+                for rowx in xrange(nrows):
+                    nc = sh.row_len(rowx)
+                    if nc:
+                        sh.row_types(rowx)[nc-1]
+                        sh.row_values(rowx)[nc-1]
+                        sh.cell(rowx, nc-1)
             for rowx in xrange(anshow-1):
                 if not printit and rowx % 10000 == 1 and rowx > 1:
-                    print "done %d rows" % (rowx-1,)
+                    print("done %d rows" % (rowx-1,))
                 show_row(bk, sh, rowx, colrange, printit)
             if anshow and nrows:
                 show_row(bk, sh, nrows-1, colrange, printit)
-            print
+            print()
+            if bk.on_demand: bk.unload_sheet(shx)
 
     def count_xfs(bk):
         bk_header(bk)
         for shx in range(bk.nsheets):
             sh = bk.sheet_by_index(shx)
-            nrows, ncols = sh.nrows, sh.ncols
-            print "sheet %d: name = %r; nrows = %d; ncols = %d" % \
-                (shx, sh.name, sh.nrows, sh.ncols)
-            if nrows and ncols:
-                # Attempt to access the RHS corners
-                sh.row_types(0)[ncols-1]
-                sh.row_values(0)[ncols-1]
-                sh.row_types(nrows-1)[ncols-1]
-                sh.row_values(nrows-1)[ncols-1]
+            nrows = sh.nrows
+            print("sheet %d: name = %r; nrows = %d; ncols = %d" %
+                (shx, sh.name, sh.nrows, sh.ncols))
             # Access all xfindexes to force gathering stats
             type_stats = [0, 0, 0, 0, 0, 0, 0]
-            for colx in xrange(ncols):
-                for rowx in xrange(nrows):
+            for rowx in xrange(nrows):
+                for colx in xrange(sh.row_len(rowx)):
                     xfx = sh.cell_xf_index(rowx, colx)
                     assert xfx >= 0
                     cty = sh.cell_type(rowx, colx)
                     type_stats[cty] += 1
-            print "XF stats", sh._xf_index_stats
-            print "type stats", type_stats
-            print
+            print("XF stats", sh._xf_index_stats)
+            print("type stats", type_stats)
+            print()
+            if bk.on_demand: bk.unload_sheet(shx)
 
     def main(cmd_args):
         import optparse
@@ -224,10 +241,6 @@ if __name__ == "__main__":
             type="int", default=0,
             help="level of information and diagnostics provided")
         oparser.add_option(
-            "-p", "--pickleable",
-            type="int", default=1,
-            help="1: ensure Book object is pickleable (default); 0: don't bother")
-        oparser.add_option(
             "-m", "--mmap",
             type="int", default=-1,
             help="1: use mmap; 0: don't use mmap; -1: accept heuristic")
@@ -239,8 +252,8 @@ if __name__ == "__main__":
             "-f", "--formatting",
             type="int", default=0,
             help="0 (default): no fmt info\n"
-                 "1: fmt info (all cells)\n"
-            )
+                 "1: fmt info (all cells)\n",
+        )
         oparser.add_option(
             "-g", "--gc",
             type="int", default=0,
@@ -257,7 +270,14 @@ if __name__ == "__main__":
             "-d", "--on-demand",
             action="store_true", default=0,
             help="load sheets on demand instead of all at once")
-
+        oparser.add_option(
+            "-t", "--suppress-timing",
+            action="store_true", default=0,
+            help="don't print timings (diffs are less messy)")
+        oparser.add_option(
+            "-r", "--ragged-rows",
+            action="store_true", default=0,
+            help="open_workbook(..., ragged_rows=True)")
         options, args = oparser.parse_args(cmd_args)
         if len(args) == 1 and args[0] in ("version", ):
             pass
@@ -272,11 +292,11 @@ if __name__ == "__main__":
             xlrd.count_records(args[1])
             sys.exit(0)
         if cmd == 'version':
-            print "xlrd: %s, from %s" % (xlrd_version, xlrd.__file__)
-            print "Python:", sys.version
+            print("xlrd: %s, from %s" % (xlrd_version, xlrd.__file__))
+            print("Python:", sys.version)
             sys.exit(0)
         if options.logfilename:
-            logfile = open(options.logfilename, 'w')
+            logfile = LogHandler(open(options.logfilename, 'w'))
         else:
             logfile = sys.stdout
         mmap_opt = options.mmap
@@ -284,39 +304,44 @@ if __name__ == "__main__":
         if mmap_opt in (1, 0):
             mmap_arg = mmap_opt
         elif mmap_opt != -1:
-            print 'Unexpected value (%r) for mmap option -- assuming default' % mmap_opt
+            print('Unexpected value (%r) for mmap option -- assuming default' % mmap_opt)
         fmt_opt = options.formatting | (cmd in ('xfc', ))
         gc_mode = options.gc
         if gc_mode:
             gc.disable()
         for pattern in args[1:]:
             for fname in glob.glob(pattern):
-                print >> logfile, "\n=== File: %s ===" % fname
+                print("\n=== File: %s ===" % fname)
+                if logfile != sys.stdout:
+                    logfile.setfileheading("\n=== File: %s ===\n" % fname)
                 if gc_mode == 1:
                     n_unreachable = gc.collect()
                     if n_unreachable:
-                        print >> logfile, "GC before open:", n_unreachable, "unreachable objects"
+                        print("GC before open:", n_unreachable, "unreachable objects")
                 try:
                     t0 = time.time()
-                    bk = xlrd.open_workbook(fname,
+                    bk = xlrd.open_workbook(
+                        fname,
                         verbosity=options.verbosity, logfile=logfile,
-                        pickleable=options.pickleable, use_mmap=mmap_arg,
+                        use_mmap=mmap_arg,
                         encoding_override=options.encoding,
                         formatting_info=fmt_opt,
                         on_demand=options.on_demand,
-                        )
+                        ragged_rows=options.ragged_rows,
+                    )
                     t1 = time.time()
-                    print >> logfile, "Open took %.2f seconds" % (t1-t0,)
-                except xlrd.XLRDError:
-                    print >> logfile, "*** Open failed: %s: %s" % sys.exc_info()[:2]
+                    if not options.suppress_timing:
+                        print("Open took %.2f seconds" % (t1-t0,))
+                except xlrd.XLRDError as e:
+                    print("*** Open failed: %s: %s" % (type(e).__name__, e))
                     continue
                 except KeyboardInterrupt:
-                    print >> logfile, "*** KeyboardInterrupt ***"
-                    traceback.print_exc(file=logfile)
+                    print("*** KeyboardInterrupt ***")
+                    traceback.print_exc(file=sys.stdout)
                     sys.exit(1)
-                except:
-                    print >> logfile, "*** Open failed ***"
-                    traceback.print_exc(file=logfile)
+                except BaseException as e:
+                    print("*** Open failed: %s: %s" % (type(e).__name__, e))
+                    traceback.print_exc(file=sys.stdout)
                     continue
                 t0 = time.time()
                 if cmd == 'hdr':
@@ -343,15 +368,16 @@ if __name__ == "__main__":
                 elif cmd == 'xfc':
                     count_xfs(bk)
                 else:
-                    print >> logfile, "*** Unknown command <%s>" % cmd
+                    print("*** Unknown command <%s>" % cmd)
                     sys.exit(1)
                 del bk
                 if gc_mode == 1:
                     n_unreachable = gc.collect()
                     if n_unreachable:
-                        print >> logfile, "GC post cmd:", fname, "->", n_unreachable, "unreachable objects"
-                t1 = time.time()
-                print >> logfile, "\ncommand took %.2f seconds\n" % (t1-t0,)
+                        print("GC post cmd:", fname, "->", n_unreachable, "unreachable objects")
+                if not options.suppress_timing:
+                    t1 = time.time()
+                    print("\ncommand took %.2f seconds\n" % (t1-t0,))
 
         return None
 
@@ -360,13 +386,14 @@ if __name__ == "__main__":
         main(av)
     firstarg = av[0].lower()
     if firstarg == "hotshot":
-        import hotshot, hotshot.stats
+        import hotshot
+        import hotshot.stats
         av = av[1:]
         prof_log_name = "XXXX.prof"
         prof = hotshot.Profile(prof_log_name)
         # benchtime, result = prof.runcall(main, *av)
         result = prof.runcall(main, *(av, ))
-        print "result", repr(result)
+        print("result", repr(result))
         prof.close()
         stats = hotshot.stats.load(prof_log_name)
         stats.strip_dirs()
@@ -379,6 +406,5 @@ if __name__ == "__main__":
         import pstats
         p = pstats.Stats('YYYY.prof')
         p.strip_dirs().sort_stats('cumulative').print_stats(30)
-
     else:
         main(av)
