@@ -12,19 +12,20 @@ import glob
 import plotly.offline as pyo
 import plotly.graph_objs as go
 import streamlit.components.v1 as components
+from streamlit_modal import Modal
 import re
 
 
 
 
-## HEADER
+## ? HEADER
 st.set_page_config(page_title='Dashboard Analytics', initial_sidebar_state='expanded')
 st.title('Personal Finances Dashboard')
 st.subheader('Graphs & Analytics')
 st.write('')
 
 
-## SIDEBAR
+## ? SIDEBAR
 st.markdown("""
 <style>
 .big-font {
@@ -41,7 +42,7 @@ st.sidebar.subheader('')
 
 
 try:
-    ## FILE UPLOAD
+    ## ? FILE UPLOAD
     uploaded_files = st.sidebar.file_uploader("Upload Your Bank Statement", type=['pdf'], accept_multiple_files=True)
     final = st.sidebar.text_input('Enter Final Bank Balance :moneybag:', placeholder="Your Bank Balance")
     bank = st.sidebar.radio('Bank', options=['POSB', 'DBS'])
@@ -85,6 +86,7 @@ try:
             print('PDF Saved')
 
 
+    ## TODO: Parse POSB PDF
     @st.cache_data
     def parsePOSBData(file):
             tables = camelot.read_pdf(f'statements/{file}', flavor='stream', pages='all')
@@ -227,6 +229,8 @@ try:
         
             return concat
     
+
+    ## TODO: Parse DBS PDF
     @st.cache_data
     def parseDBSData(file):
         tables = camelot.read_pdf(f'statements/{file}', flavor='stream', pages='all')
@@ -487,6 +491,7 @@ try:
         if dr == 2548.24 and cr == 2498.06:
             st.markdown('Below Is A Sample File & Dashboard', unsafe_allow_html=True)
         st.write('')
+            
 
         column1, column2, column3 = st.columns(3)
         with column1:
@@ -549,9 +554,67 @@ b {
 
         st.dataframe(concat)
 
+        modalDr = Modal(key='ModalDr', title='Debit Transactions')
+        modalCr = Modal(key='ModalCr', title='Credit Transactions')
+
+        column1, column2, column3, column4, column5, column6 = st.columns(6)
+        with column1:
+            open_modal_dr = st.button(key='drmodal', label='Debit List')
+        with column2:
+            open_modal_cr = st.button(key='crmodal', label='Credit List')
+
+        ## Debit Modal
+        if open_modal_dr:
+            modalDr.open()
+        if modalDr.is_open():
+            with modalDr.container():
+                st.write("List Of Debit Transactions")
+                drTransact = concat[concat['Debit'].str.len() > 0]
+                st.dataframe(drTransact)
+
+                # html_string = '''
+                # <h1>HTML string in RED</h1>
+
+                # <script language="javascript">
+                # document.querySelector("h1").style.color = "red";
+                # </script>
+                # '''
+                # components.html(html_string)
+
+                # value = st.checkbox("Check me")
+                # st.write(f"Checkbox checked: {value}")
+
+        ## Credit Modal
+        if open_modal_cr:
+            modalCr.open()
+        if modalCr.is_open():
+            with modalCr.container():
+                st.write("List Of Credit Transactions")
+                crTransact = concat[concat['Credit'].str.len() > 0]
+                st.dataframe(crTransact)
+
+                # html_string = '''
+                # <h1>HTML string in RED</h1>
+
+                # <script language="javascript">
+                # document.querySelector("h1").style.color = "red";
+                # </script>
+                # '''
+                # components.html(html_string)
+                # value = st.checkbox("Check me")
+                # st.write(f"Checkbox checked: {value}")
+
 
         progress.progress(100)
         status.text('Done !')
+
+
+
+        ## ! TESTING ZONE
+        # csv = pd.read_csv('posb_csv.csv')
+        # st.dataframe(csv)
+
+
     except Exception as e:
         st.write(e)
         pass
