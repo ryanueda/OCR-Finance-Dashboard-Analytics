@@ -53,6 +53,7 @@ rich==13.4.2
 six==1.16.0
 smmap==5.0.0
 streamlit==1.23.1
+streamlit-modal
 Tempita==0.5.2
 tenacity==8.2.2
 toml==0.10.2
