@@ -81,7 +81,7 @@ The use of these caching functions creates a stark difference in processing time
 st.markdown('<h4>Contributions & Improvements</h4>', unsafe_allow_html=True)
 st.markdown('''<p>
 This website is still in development and lacking in many areas. One main area of concern is the efficiency of categorization of transactions. This refers to categorizing transaction data into baskets such as:
-<i>food, transport, shopping, etc.</i> One way this can be improved would be through the use of a suitable Machine Learning model, likely regressive in nature. <br>
+<i>food, transport, shopping, etc.</i> One way this can be improved would be through the use of a suitable Machine Learning model. <br>
 
 If any developers are keen to contributing to this project, please drop me an email along with your implementation/proposal at <a href="ryanueda34@gmail.com">ryanueda34@gmail.com.
 </p>''', unsafe_allow_html=True)
